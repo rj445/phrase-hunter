@@ -7,6 +7,8 @@ class Game {
 
     // Start the game by using new phrase
     startGame() {
+        $("#overlay").removeClass("win");
+        $("#overlay").removeClass("lose");
         $("#overlay").hide();
         this.activePhrase = new Phrase(this.getRandomPhrase());
         this.activePhrase.addPhraseToDisplay();
@@ -35,8 +37,11 @@ class Game {
 
     // Remove the last heart(i.e. life) 
     removeLife() {
-        $("#scoreboard li:visible:last").hide();
+        let hearts = $("#scoreboard li");
         this.missed += 1;
+        for (let heartIndex = 4; heartIndex >= (hearts.length - this.missed); heartIndex -= 1) {
+            $(hearts[heartIndex]).children("img").attr("src", "images/lostHeart.png");
+        }
         if (this.missed === 5) {
             this.gameOver(false);
         }
@@ -55,9 +60,11 @@ class Game {
     gameOver(isUserWon) {
         if (isUserWon) {
             $("#game-over-message").text("Congrats! You've won the game");
+            $("#overlay").addClass("win");
         }
         else {
             $("#game-over-message").text("Oops! Better luck next time");
+            $("#overlay").addClass("lose");
         }
         this.resetGame();
     }
@@ -70,6 +77,10 @@ class Game {
         $("#qwerty button").removeAttr("disabled");
         $("#qwerty button").removeClass("wrong");
         $("#phrase li").remove();
+        let hearts = $("#scoreboard li");
+        for (let heartIndex = 4; heartIndex >= 0; heartIndex -= 1) {
+            $(hearts[heartIndex]).children("img").attr("src", "images/liveHeart.png");
+        }
         $("#overlay").show();
         this.missed = 0;
         this.activePhrase = null;

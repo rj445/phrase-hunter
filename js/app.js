@@ -1,13 +1,16 @@
-let game = new Game();
+let game = null;
 
 // Listen for button click on start game button
 $("#btn__reset").on('click', (event) => {
+    game = new Game()
     game.startGame();
 });
 
 // Listen for button click of keys
 $("#qwerty").on("click", "button", (event) => {
-    game.handleInteraction(event.target);
+    if (game != null) {
+        game.handleInteraction(event.target);
+    }
 });
 
 // Listen for key press on the key board and will use screens button for adding interaction to the game
